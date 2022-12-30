@@ -331,6 +331,7 @@ const passwordOlvidado = async (req, res, next) => {
     //crear un token para devolver  y sera usado para crear el nuevo password
     const usuario = {
       email: rolBuscadoEnDB.email,
+      nombre: rolBuscadoEnDB.nombre
     };
 
     //firmamos token
@@ -340,13 +341,15 @@ const passwordOlvidado = async (req, res, next) => {
     // const link = `localhost:3001/resetPassword`; //ver en front cual es el LINK que abre la FORM
     const link = "https://grupoaguilasrl.com"
 
-    //armamos template para enviar
+    //armamos template para enviar por email
     const mailDetails = {
       from: "no-reply@centropequenosgigantes.com",
       // to: usuario.email,
       to:`${rolBuscadoEnDB.email}`,
       subject: "Recuperar el password",
-      html: `<h2>Servicio de recuperacion de contraseña</h2>
+      html: `
+          <H2>Hola ${rolBuscadoEnDB.nombre}!</h2>
+          <h2>Este es el servicio de recuperacion de contraseña</h2>
           <h3>Para resetear el password, hace click en el siguiente Link</h3>
           <h4>
             <a href="${link}" target="_blank">Reset contraseña</a>
@@ -359,7 +362,8 @@ const passwordOlvidado = async (req, res, next) => {
         return res.status(500).send(err.message);
       } else {
         res.status(200).json({
-          message: `Hola, ¿Cómo estás?, te hemos enviado un email a ${usuario.email}`,
+          //estas variables vienen del objeto usuario creado arriba
+          message: `Hola, ¿Cómo estás? ${usuario.nombre}, te hemos enviado un email a ${usuario.email}`,
           token: token,
         });
       }

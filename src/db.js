@@ -3,22 +3,26 @@ const { Sequelize } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
 const {
-  DB_USER, DB_PASSWORD, DB_HOST, DB_DIALECT,ACQUIRE,IDLE,DB_NAME
+  DATABASE_URL,
+  DB_HOST,
+  DB_USER,
+  DB_PASSWORD
 } = process.env;
 
 
-const sequelize = new Sequelize(DB_NAME, DB_USER,
-    DB_PASSWORD, {
-        host: DB_HOST,
-        dialect: DB_DIALECT,
-        operationsAliases: false,
-        pool: {
-        max: 5,
-        min: 1,
-        acquire: ACQUIRE,
-        idle: IDLE
-        }
-    });
+const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/pequenosgigantes`, {
+  logging: false, // set to console.log to see the raw SQL queries
+  native: false,// lets Sequelize know we can use pg-native for ~30% more speed
+  
+  // //extra configuration for heroku
+  //   dialectOptions:{
+  //   ssl:{
+  //     require:true,
+  //     rejectUnauthorized:false
+  //    }
+  //  },
+
+})
 const basename = path.basename(__filename);
 
 const modelDefiners = [];

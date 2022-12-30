@@ -18,6 +18,9 @@ module.exports = (sequelize) => {
     },
     hora:{
         type: DataTypes.STRING
+    },
+    nombreProfesional:{
+        type: DataTypes.STRING
     }
   },{
     freezeTableName: true,

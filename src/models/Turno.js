@@ -22,12 +22,22 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull:false
     },
+    formaPago:{
+        type: DataTypes.STRING,
+        allowNull:false
+    },
+    valor:{
+        type: DataTypes.STRING,
+        allowNull:false,
+        defaultValue:"0"
+    },
     
     estado:{
         type: DataTypes.ENUM('pendiente' , 'finalizado', 'cancelado','disponible','reservado'),
         allowNull:false,
         defaultValue: "disponible"
     }
+
   },{
     freezeTableName: true,
     timestamps: false
