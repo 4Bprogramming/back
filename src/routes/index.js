@@ -17,7 +17,7 @@ router.get("/profesionales", profesionales);//tokenVerify,
 router.get("/profesionales/:idProfesional",profesionalPorId);//tokenVerify,
 
 //buscar todos los usuarios
-router.get ('/usuarios',usuarios)//tokenVerify,
+router.get ('/usuarios',tokenVerify,usuarios)//
 
 // buscar usuario por Email
 router.get ('/usuarios/:email',usuarioPorEmail);//tokenVerify,
