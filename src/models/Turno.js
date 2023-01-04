@@ -24,7 +24,7 @@ module.exports = (sequelize) => {
     },
     formaPago:{
         type: DataTypes.STRING,
-        allowNull:false
+      
     },
     valor:{
         type: DataTypes.STRING,

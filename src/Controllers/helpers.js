@@ -26,13 +26,17 @@ const makeAppointment=(dates, hours)=>{
 async function checking(dates,hours,profesionalIdProfesional){
     
     const appointments=makeAppointment(dates,hours)
-   
     const checkingApp={availableApp:[],busyApp:[]}
-            for(let i=0; i< appointments.length; i++){
-               
-                    let startTimeApp = [appointments[i].start[3] , appointments[i].start[4]]
-                    let endTimeApp = [appointments[i].end[3] , appointments[i].end[4]]
-                    let dateApp =  [appointments[i].start[0] , appointments[i].start[1] ,appointments[i].start[2]]
+    for(let i=0; i< appointments.length; i++){
+            //     console.log('************');  
+            //       console.log(' CHECKING appointments 0===>>>', appointments[i].start[0]);
+            //       console.log(' CHECKING appointments 1===>>>', appointments[i].start[1]);
+            //       console.log(' CHECKING appointments 2===>>>', appointments[i].start[2]);
+            //       console.log('************');  
+            //    console.log('entra al for');
+                    let startTimeApp = `${appointments[i].start[3]}:${appointments[i].start[4]}`
+                    let endTimeApp = `${appointments[i].end[3]}:${appointments[i].end[4]}`
+                    let dateApp =  `${appointments[i].start[2]}-${appointments[i].start[1]}-${appointments[i].start[0]}`
                     
                     let allAppointments= await Turno.findAll({
                         where:{
@@ -42,7 +46,7 @@ async function checking(dates,hours,profesionalIdProfesional){
                             date: dateApp
                         }
                     })
-                    console.log('trae todos los apointments donde...=>', allAppointments);
+                    // console.log('trae todos los apointments donde...=>', allAppointments);
                     
                     if(allAppointments.length > 0){
                         
@@ -52,7 +56,7 @@ async function checking(dates,hours,profesionalIdProfesional){
                         checkingApp.availableApp.push(appointments[i])
                     }
             }
-            console.log('esto devuelve checking', checkingApp);
+            // console.log('esto devuelve checking', checkingApp);
             return checkingApp
 }
 

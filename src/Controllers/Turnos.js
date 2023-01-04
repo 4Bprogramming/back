@@ -148,7 +148,7 @@ const horariosCreados = async(req, res, next)=>{
         let hoursFilter= []
     //    console.log('creo estos horarios sin filtros', hours)
         !Array.isArray(hours)? hoursFilter.push(hours): hoursFilter=[...hours]
-   console.log('tengo en back estos horarios creados===>', hoursFilter)
+//    console.log('tengo en back estos horarios creados===>', hoursFilter)
      return res.status(200).send(hoursFilter)
         
     } catch (error) {
@@ -162,9 +162,13 @@ const horariosCreados = async(req, res, next)=>{
 const turnoCrear=async(req, res, next)=>{
     try {
         const {hours, dates, profesionalIdProfesional}= req.body
-      
+    //   console.log('************');  
+    //   console.log('req.body===>>>', req.body);
+    //   console.log('************');  
         const appointments = await checking(dates,hours,profesionalIdProfesional)
-        
+        // console.log('************');  
+        // console.log('appointments===>>>', appointments);
+        // console.log('************');  
        if(appointments.availableApp.length> 0){
        
             let apps = appointments.availableApp.map((app)=>{
@@ -175,7 +179,7 @@ const turnoCrear=async(req, res, next)=>{
                 profesionalIdProfesional: profesionalIdProfesional,
                 }
             })
-                 console.log('Turnos a enviar a base de datos=====>',apps)
+                //  console.log('Turnos a enviar a base de datos=====>',apps)
                await Turno.bulkCreate(apps);  
     
                res.status(200).send('Los turnos fueron creados'); 
