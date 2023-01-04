@@ -421,7 +421,7 @@ const resetPassword = async (req, res, next) => {
 
 const modificarTurno = async (req, res, next) => {
   try {
-    const { id, estado, email } = req.body;
+    const { id, estado, email, formaPago, valor  } = req.body;
     const turno = await Turno.findByPk(id);
 
     //reservar (booked)
@@ -438,6 +438,8 @@ const modificarTurno = async (req, res, next) => {
       await turno?.update({
         estado: estado,
         usuarioEmail: email,
+        formaPago:formaPago,
+        formaPago:valor
       });
       res
         .status(200)
