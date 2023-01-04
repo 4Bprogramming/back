@@ -53,7 +53,7 @@ router.post('/historiaclinica',crearHistoriaClinica)//tokenVerify,
 
 
 //***PUT --> (UPDATE)***/
-router.put('/turnos',modificarTurno);//tokenVerify,
+router.put('/turnos',tokenVerify,modificarTurno);//,
 router.put('/editarprofesional/:idProfesional',sanitizador,tokenVerify,editarprofesional)
 router.put('/editarusuario/:email',sanitizador,tokenVerify,editarusuario)
 
