@@ -51,6 +51,7 @@ const profesionalPorId = async (req, res, next) => {
 
 // traer todos los usuarios
 const usuarios = async (req, res, next) => {
+
   try {
     const usuarios = await Usuario.findAll({
       include: { model: Historiaclinica }
@@ -153,6 +154,7 @@ const traerTurnoPorID = async (req, res, next) => {
 
 //crear usuario
 const crearUsuario = async (req, res, next) => {
+  console.log('body crear usuario===>>>',req.body);
   try {
     const hashedPassword = await hashPassword(req.body.password);
     const usuarioCreado = await Usuario.create({
@@ -423,7 +425,8 @@ const modificarTurno = async (req, res, next) => {
   try {
     const { id, estado, email, formaPago, valor  } = req.body;
     const turno = await Turno.findByPk(id);
-
+    console.log('REQ BODY==>>>', req.body);
+    
     //reservar (booked)
     if (estado === "reservado" && email) {
       await turno?.update({
@@ -435,11 +438,12 @@ const modificarTurno = async (req, res, next) => {
     }
     //turno ya pago pasa a "pendiente" hasta ser atendido.
     else if (estado === "pendiente" && email) {
+      console.log('turno??', turno);
       await turno?.update({
         estado: estado,
         usuarioEmail: email,
         formaPago:formaPago,
-        formaPago:valor
+        valor:valor
       });
       res
         .status(200)

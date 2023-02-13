@@ -17,7 +17,7 @@ router.get("/profesionales", profesionales);//tokenVerify,
 router.get("/profesionales/:idProfesional",profesionalPorId);//tokenVerify,
 
 //buscar todos los usuarios
-router.get ('/usuarios',tokenVerify,usuarios)//
+router.get ('/usuarios',usuarios)//tokenVerify,
 
 // buscar usuario por Email
 router.get ('/usuarios/:email',usuarioPorEmail);//tokenVerify,
@@ -37,7 +37,7 @@ router.get('/turnos/:id',traerTurnoPorID);//tokenVerify,
 
 
 //***POSTS*****/
-router.post('/usuarios',validadorDeDatos,crearUsuario);
+router.post('/usuarios',validadorDeDatos,crearUsuario);//
 router.post('/profesionales',validadorDeDatos,crearProfesional);
 // router.post('/turnos',tokenVerify,crearTurno);
 router.post('/turnos',tokenVerify,turnoCrear);//
