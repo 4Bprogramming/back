@@ -7,7 +7,7 @@ const {
   Turno,
   Admin,
   Historiaclinica,
-} = require("../db");
+} = require("../db.js");
 //importamos funcion para hashear
 const { hashPassword, checkPassword } = require("../helpers/handlePassword.js");
 const { tokenSign } = require("../helpers/jwt");
