@@ -2,8 +2,9 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const path = require('path');
 const routes = require('./routes/index.js');
-
+const {paymentRouter} = require('./payment/routes/payment.routes');
 require('./db.js');
 
 const server = express();
@@ -33,6 +34,12 @@ server.use((req, res, next) => {
 
 
 server.use('/', routes);
+server.use("/api",paymentRouter)
+
+server.get("/",(req,res)=>{
+    res.sendFile(path.join(__dirname+"/payment/public/index.html"));
+})
+
 
 // Error catching endware.
 server.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
