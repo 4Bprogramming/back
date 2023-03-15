@@ -161,13 +161,13 @@ const horariosCreados = async(req, res, next)=>{
 //ruta creadora de turnos
 const turnoCrear=async(req, res, next)=>{
     try {
-        const {hours, dates, profesionalIdProfesional}= req.body
+        const {hours, dates, profesionalIdProfesional, valor}= req.body
     //   console.log('************');  
-    //   console.log('req.body===>>>', req.body);
+      console.log('req.body===>>>', req.body);
     //   console.log('************');  
         const appointments = await checking(dates,hours,profesionalIdProfesional)
         // console.log('************');  
-        // console.log('appointments===>>>', appointments);
+        console.log('appointments===>>>', appointments);
         // console.log('************');  
        if(appointments.availableApp.length> 0){
        
@@ -177,10 +177,11 @@ const turnoCrear=async(req, res, next)=>{
                 endTime: `${app.end[3] }:${ app.end[4]}`,
                 date: `${app.start[2]}-${app.start[1]}-${app.start[0]}`,
                 profesionalIdProfesional: profesionalIdProfesional,
+                valor: valor
                 }
             })
-                //  console.log('Turnos a enviar a base de datos=====>',apps)
-               await Turno.bulkCreate(apps);  
+            console.log('Turnos a enviar a base de datos=====>',apps)
+            await Turno.bulkCreate(apps)
     
                res.status(200).send('Los turnos fueron creados'); 
        }
