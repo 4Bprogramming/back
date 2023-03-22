@@ -33,11 +33,13 @@ const profesionales = async (req, res, next) => {
 // Traer profesional por ID
 const profesionalPorId = async (req, res, next) => {
   const { idProfesional } = req.params;
+  console.log('el vago esta??==>', idProfesional);
   try {
     const profesionalXiD = await Profesional.findByPk(idProfesional, {
       include: Turno,
     });
     if (profesionalXiD) {
+      console.log('profesional===>', profesionalXiD);
       res.status(200).send(profesionalXiD);
     } else {
       return res
@@ -125,6 +127,7 @@ const traerTurnos = async (req, res, next) => {
         model:Profesional
       }
     });
+    console.log('todos los turnos==>', todosLosTurnos);
     if (!todosLosTurnos)
       return res.status(404).send({ message: "No se encontró ningun turno" });
     res.status(200).send(todosLosTurnos);
@@ -204,32 +207,36 @@ const crearTurno = async (req, res, next) => {
 // Login
 const login = async (req, res, next) => {
   try {
-    const { email, password, select } = req.body;
-
+    const { email, password } = req.body;
+    console.log('body==>', req.body);
     //chequeamos el SELECT
-    if (select === "usuario") {
-      var respuestaDB = await Usuario.findByPk(email, {
+    // if (select === "usuario") {
+      const respuestaDBusuario = await Usuario.findByPk(email, {
         include: { model: Turno },
       });
-    } else if (select === "profesional") {
-      var respuestaDB = await Profesional.findOne({
+    // } else if (select === "profesional") {
+      const respuestaDBprofesional = await Profesional.findOne({
         where: { email: email },
         include: { model: Turno },
       });
-    } else if (select === "administrador") {
-      var respuestaDB = await Admin.findByPk(email);
-    } else {
-      return res.status(404).send({
-        message: `el select debe ser 'usuario', 'profesional' o 'administrador' el valor fue ${select}`,
-      });
-    }
+    // } else if (select === "administrador") {
+      const respuestaDBadmin = await Admin.findByPk(email);
+    // } else {
+      // return res.status(404).send({
+      //   message: `el select debe ser 'usuario', 'profesional' o 'administrador' el valor fue ${select}`,
+      // });
+    // }
 
     //si no existe respuesta.
-    if (!respuestaDB)
+    if (! respuestaDBusuario && !respuestaDBadmin && !respuestaDBprofesional)
       return res
         .status(401)
         .send({ message: "El usuario no se encontró con ese email." });
-    const passwordCorrecto = await checkPassword(
+   let respuestaDB
+        if(respuestaDBusuario)respuestaDB=respuestaDBusuario
+        if(respuestaDBadmin)respuestaDB=respuestaDBadmin
+        if(respuestaDBprofesional)respuestaDB=respuestaDBprofesional
+      const passwordCorrecto = await checkPassword(
       password,
       respuestaDB.password
     );
@@ -271,6 +278,7 @@ const crearAdmin = async (req, res, next) => {
 
 // Crear historia clinica
 const crearHistoriaClinica = async (req, res, next) => {
+  console.log('req.body==>', req.body);
   try {
     const historiaClinicaCreada = await Historiaclinica.create({ ...req.body });
     if (!historiaClinicaCreada)
@@ -422,10 +430,10 @@ const resetPassword = async (req, res, next) => {
 // Reservar el turno por el usuario.
 
 const modificarTurno = async (req, res, next) => {
+  console.log('REQ BODY==>>>', req.body);
   try {
     const { id, estado, email, formaPago, valor  } = req.body;
     const turno = await Turno.findByPk(id);
-    console.log('REQ BODY==>>>', req.body);
     
     //reservar (booked)
     if (estado === "reservado" && email) {
