@@ -12,12 +12,10 @@ const {
 const { hashPassword, checkPassword } = require("../helpers/handlePassword.js");
 const { tokenSign } = require("../helpers/jwt");
 
-
 //********************************************************GET**************************************** */
 
 //traer todos los profesionales
 const profesionales = async (req, res, next) => {
-  
   try {
     const profesionales = await Profesional.findAll({ include: Turno });
     if (profesionales.length === 0)
@@ -53,10 +51,9 @@ const profesionalPorId = async (req, res, next) => {
 
 // traer todos los usuarios
 const usuarios = async (req, res, next) => {
-
   try {
     const usuarios = await Usuario.findAll({
-      include: { model: Historiaclinica }
+      include: { model: Historiaclinica },
     });
     if (usuarios.length === 0)
       return res.status(404).send({ message: "No se encontraron usuarios" });
@@ -71,7 +68,7 @@ const usuarioPorEmail = async (req, res, next) => {
   const { email } = req.params;
   try {
     const usuarioPorMail = await Usuario.findByPk(email, {
-      include: {model: Historiaclinica} ,
+      include: { model: Historiaclinica },
     });
     if (usuarioPorMail) {
       res.status(200).send(usuarioPorMail);
@@ -123,11 +120,11 @@ const traerHistoriaClinicaPorID = async (req, res, next) => {
 const traerTurnos = async (req, res, next) => {
   try {
     const todosLosTurnos = await Turno.findAll({
-      include:{
-        model:Profesional
-      }
+      include: {
+        model: Profesional,
+      },
     });
-    console.log('todos los turnos==>', todosLosTurnos);
+    console.log("todos los turnos==>", todosLosTurnos);
     if (!todosLosTurnos)
       return res.status(404).send({ message: "No se encontró ningun turno" });
     res.status(200).send(todosLosTurnos);
@@ -157,7 +154,7 @@ const traerTurnoPorID = async (req, res, next) => {
 
 //crear usuario
 const crearUsuario = async (req, res, next) => {
-  console.log('body crear usuario===>>>',req.body);
+  console.log("body crear usuario===>>>", req.body);
   try {
     const hashedPassword = await hashPassword(req.body.password);
     const usuarioCreado = await Usuario.create({
@@ -175,7 +172,7 @@ const crearUsuario = async (req, res, next) => {
 
 //crear profesional
 const crearProfesional = async (req, res, next) => {
-  console.log('llegue', req.body);
+  console.log("llegue", req.body);
   try {
     const hashedPassword = await hashPassword(req.body.password);
     const profesionalCreado = await Profesional.create({
@@ -208,35 +205,35 @@ const crearTurno = async (req, res, next) => {
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    console.log('body==>', req.body);
+    console.log("body==>", req.body);
     //chequeamos el SELECT
     // if (select === "usuario") {
-      const respuestaDBusuario = await Usuario.findByPk(email, {
-        include: { model: Turno },
-      });
+    const respuestaDBusuario = await Usuario.findByPk(email, {
+      include: { model: Turno },
+    });
     // } else if (select === "profesional") {
-      const respuestaDBprofesional = await Profesional.findOne({
-        where: { email: email },
-        include: { model: Turno },
-      });
+    const respuestaDBprofesional = await Profesional.findOne({
+      where: { email: email },
+      include: { model: Turno },
+    });
     // } else if (select === "administrador") {
-      const respuestaDBadmin = await Admin.findByPk(email);
+    const respuestaDBadmin = await Admin.findByPk(email);
     // } else {
-      // return res.status(404).send({
-      //   message: `el select debe ser 'usuario', 'profesional' o 'administrador' el valor fue ${select}`,
-      // });
+    // return res.status(404).send({
+    //   message: `el select debe ser 'usuario', 'profesional' o 'administrador' el valor fue ${select}`,
+    // });
     // }
 
     //si no existe respuesta.
-    if (! respuestaDBusuario && !respuestaDBadmin && !respuestaDBprofesional)
+    if (!respuestaDBusuario && !respuestaDBadmin && !respuestaDBprofesional)
       return res
         .status(401)
         .send({ message: "El usuario no se encontró con ese email." });
-   let respuestaDB
-        if(respuestaDBusuario)respuestaDB=respuestaDBusuario
-        if(respuestaDBadmin)respuestaDB=respuestaDBadmin
-        if(respuestaDBprofesional)respuestaDB=respuestaDBprofesional
-      const passwordCorrecto = await checkPassword(
+    let respuestaDB;
+    if (respuestaDBusuario) respuestaDB = respuestaDBusuario;
+    if (respuestaDBadmin) respuestaDB = respuestaDBadmin;
+    if (respuestaDBprofesional) respuestaDB = respuestaDBprofesional;
+    const passwordCorrecto = await checkPassword(
       password,
       respuestaDB.password
     );
@@ -278,7 +275,7 @@ const crearAdmin = async (req, res, next) => {
 
 // Crear historia clinica
 const crearHistoriaClinica = async (req, res, next) => {
-  console.log('req.body==>', req.body);
+  console.log("req.body==>", req.body);
   try {
     const historiaClinicaCreada = await Historiaclinica.create({ ...req.body });
     if (!historiaClinicaCreada)
@@ -300,12 +297,12 @@ const res = require("express/lib/response");
 //creamos el transporter
 const transporter = nodemailer.createTransport({
   host: "host107.latinoamericahosting.com",
-  port:465,
+  port: 465,
   // service:'gmail',
   secure: true,
   auth: {
-    user:"no-reply@centropequenosgigantes.com",
-    pass: "4b-programming"
+    user: "no-reply@centropequenosgigantes.com",
+    pass: "4b-programming",
   },
   tls: {
     rejectUnauthorized: false, // sin esto no funciona.Ver esto en producción
@@ -315,33 +312,22 @@ const transporter = nodemailer.createTransport({
 //********** PASSWORD OLVIDADO*****ATENCION A ESTAS FUNCIONES*********/
 const passwordOlvidado = async (req, res, next) => {
   try {
-
-    const { email, select } = req.body;
+    const { email } = req.body;
+    let rolBuscadoEnDB = null;
     //chequeamos el SELECT
-    if (select === "usuario") {
-      var rolBuscadoEnDB = await Usuario.findByPk(email, {
-        
-      });
-    } else if (select === "profesional") {
-      var rolBuscadoEnDB = await Profesional.findOne({
-        where: { email: email }
-        
-      });
-    } else if (select === "administrador") {
-      var rolBuscadoEnDB = await Admin.findByPk(email);
-    } else {
-      return res.status(404).send({
-        message: `el select debe ser 'usuario', 'profesional' o 'administrador' el valor fue ${select}`,
-      });
+    rolBuscadoEnDB = await Usuario.findByPk(email);
+    if (!rolBuscadoEnDB) {
+      rolBuscadoEnDB = await Profesional.findOne({ where: { email: email } });
+    } else if (!rolBuscadoEnDB) {
+      rolBuscadoEnDB = await Admin.findByPk(email);
+    } else if (!rolBuscadoEnDB) {
+      return res.status(401).send({ message: `El email no fue encontrado.` });
     }
-
-    //si no existe respuesta.
-    if (!rolBuscadoEnDB)return res.status(401).send({ message: `El ${select} no se encontró con ese email.` });
 
     //crear un token para devolver  y sera usado para crear el nuevo password
     const usuario = {
       email: rolBuscadoEnDB.email,
-      nombre: rolBuscadoEnDB.nombre
+      nombre: rolBuscadoEnDB.nombre,
     };
 
     //firmamos token
@@ -349,13 +335,13 @@ const passwordOlvidado = async (req, res, next) => {
 
     //armamos el link para resetear
     // const link = `localhost:3001/resetPassword`; //ver en front cual es el LINK que abre la FORM
-    const link = "https://grupoaguilasrl.com"
+    const link = `http://localhost:3000/reset-password/${email}/${token}`;
 
     //armamos template para enviar por email
     const mailDetails = {
       from: "no-reply@centropequenosgigantes.com",
       // to: usuario.email,
-      to:`${rolBuscadoEnDB.email}`,
+      to: `${rolBuscadoEnDB.email}`,
       subject: "Recuperar el password",
       html: `
           <H2>Hola ${rolBuscadoEnDB.nombre}!</h2>
@@ -364,7 +350,7 @@ const passwordOlvidado = async (req, res, next) => {
           <h4>
             <a href="${link}" target="_blank">Reset contraseña</a>
           </h4>  
-          `   
+          `,
     };
     //usamos el transporter para enviar el mail con el magic-link
     transporter.sendMail(mailDetails, (err, info) => {
@@ -388,28 +374,16 @@ const passwordOlvidado = async (req, res, next) => {
 // si o si hay que incluir el TOKEN en los headers del FRONT
 const resetPassword = async (req, res, next) => {
   try {
-    const { password, email, select } = req.body;
-
-    //chequeamos el SELECT
-    if (select === "usuario") {
-      var rolDB = await Usuario.findByPk(email, {
-        include: { model: Turno },
-      });
-    } else if (select === "profesional") {
-      var rolDB = await Profesional.findOne({
-        where: { email: email },
-        include: { model: Turno },
-      });
-    } else if (select === "administrador") {
-      var rolDB = await Admin.findByPk(email);
-    } else {
-      return res.status(404).send({
-        message: `el select debe ser 'usuario', 'profesional' o 'administrador' el valor fue ${select}`,
-      });
+    const { password, email } = req.body;
+    let rolDB = null;
+    rolDB = await Usuario.findByPk(email);
+    if (!rolDB) {
+      rolDB = await Profesional.findOne({ where: { email: email } });
+    } else if (!rolDB) {
+      rolDB = await Admin.findByPk(email);
+    } else if (!rolDB) {
+      return res.status(401).send({ message: "¡El email no se encontró!." });
     }
-
-    //si no existe respuesta.
-    if (!rolDB)return res.status(401).send({ message: `El ${select} no se encontró con ese email.` });
 
     //hasheamos password nuevamente
     const hashedPassword = await hashPassword(password);
@@ -417,9 +391,13 @@ const resetPassword = async (req, res, next) => {
       password: hashedPassword,
     });
     if (!usuarioActualizado) {
-        return res.status(401).send({ message: "¡No se ha podido cambiar su contraseña!" });
+      return res
+        .status(401)
+        .send({ message: "¡No se ha podido cambiar su contraseña!" });
     } else {
-        res.status(200).send({ message: "¡El cambio de su contraseña fue exitoso!" });
+      res
+        .status(200)
+        .send({ message: "¡El cambio de su contraseña fue exitoso!" });
     }
   } catch (e) {
     next(e);
@@ -430,11 +408,11 @@ const resetPassword = async (req, res, next) => {
 // Reservar el turno por el usuario.
 
 const modificarTurno = async (req, res, next) => {
-  console.log('REQ BODY==>>>', req.body);
+  console.log("REQ BODY==>>>", req.body);
   try {
-    const { id, estado, email, formaPago, valor  } = req.body;
+    const { id, estado, email, formaPago, valor } = req.body;
     const turno = await Turno.findByPk(id);
-    
+
     //reservar (booked)
     if (estado === "reservado" && email) {
       await turno?.update({
@@ -446,12 +424,12 @@ const modificarTurno = async (req, res, next) => {
     }
     //turno ya pago pasa a "pendiente" hasta ser atendido.
     else if (estado === "pendiente" && email) {
-      console.log('turno??', turno);
+      console.log("turno??", turno);
       await turno?.update({
         estado: estado,
         usuarioEmail: email,
-        formaPago:formaPago,
-        valor:valor
+        formaPago: formaPago,
+        valor: valor,
       });
       res
         .status(200)
