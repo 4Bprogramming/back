@@ -33,13 +33,13 @@ const profesionales = async (req, res, next) => {
 // Traer profesional por ID
 const profesionalPorId = async (req, res, next) => {
   const { idProfesional } = req.params;
-  console.log('el vago esta??==>', idProfesional);
+  // console.log('el vago esta??==>', idProfesional);
   try {
     const profesionalXiD = await Profesional.findByPk(idProfesional, {
       include: Turno,
     });
     if (profesionalXiD) {
-      console.log('profesional===>', profesionalXiD);
+      // console.log('profesional===>', profesionalXiD);
       res.status(200).send(profesionalXiD);
     } else {
       return res
