@@ -313,14 +313,21 @@ const transporter = nodemailer.createTransport({
 const passwordOlvidado = async (req, res, next) => {
   try {
     const { email } = req.body;
+    // console.log('voy a buscar si el mail existe==>', email);
     let rolBuscadoEnDB = null;
     //chequeamos el SELECT
     rolBuscadoEnDB = await Usuario.findByPk(email);
+    // console.log('se encontró en pacientes=>', rolBuscadoEnDB);
     if (!rolBuscadoEnDB) {
       rolBuscadoEnDB = await Profesional.findOne({ where: { email: email } });
-    } else if (!rolBuscadoEnDB) {
+    } 
+    
+    console.log('se encontró en profesional=>', rolBuscadoEnDB);
+    if (!rolBuscadoEnDB) {
       rolBuscadoEnDB = await Admin.findByPk(email);
-    } else if (!rolBuscadoEnDB) {
+      // console.log('se encontró en admin=>', rolBuscadoEnDB);
+    } if (!rolBuscadoEnDB) {
+      // console.log('no se encontró el email');
       return res.status(401).send({ message: `El email no fue encontrado.` });
     }
 
@@ -329,13 +336,14 @@ const passwordOlvidado = async (req, res, next) => {
       email: rolBuscadoEnDB.email,
       nombre: rolBuscadoEnDB.nombre,
     };
-
+    console.log('usuario=>', usuario);
     //firmamos token
     const token = await tokenSign(usuario, "15m");
 
     //armamos el link para resetear
     // const link = `localhost:3001/resetPassword`; //ver en front cual es el LINK que abre la FORM
     const link = `http://localhost:3000/reset-password/${email}/${token}`;
+    // console.log('link de redirección==>', link);
 
     //armamos template para enviar por email
     const mailDetails = {
