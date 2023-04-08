@@ -295,14 +295,15 @@ const crearHistoriaClinica = async (req, res, next) => {
 const nodemailer = require("nodemailer");
 const res = require("express/lib/response");
 //creamos el transporter
+//contraseña gmail adminApi(creada por gise)= ruimsqztksysprfq
 const transporter = nodemailer.createTransport({
-  host: "host107.latinoamericahosting.com",
+  host: "smtp.gmail.com",
   port: 465,
   // service:'gmail',
   secure: true,
   auth: {
-    user: "no-reply@centropequenosgigantes.com",
-    pass: "4b-programming",
+    user: "pequenosgigantes4b@gmail.com",
+    pass: "ruimsqztksysprfq",
   },
   tls: {
     rejectUnauthorized: false, // sin esto no funciona.Ver esto en producción
