@@ -14,7 +14,7 @@ const { horariosCreados, turnoCrear } = require("../Controllers/Turnos");
 router.get("/profesionales", profesionales);//tokenVerify,
 
 // traer profesional por ID
-router.get("/profesionales/:idProfesional",profesionalPorId);//tokenVerify,
+router.get("/profesionales/:idProfesional",profesionalPorId);//tokenVerify, 
 
 //buscar todos los usuarios
 router.get ('/usuarios',usuarios)//tokenVerify,

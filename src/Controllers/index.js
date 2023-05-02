@@ -4,7 +4,7 @@
 const {
   Profesional,
   Usuario,
-  Turno,
+  Turno, 
   Admin,
   Historiaclinica,
 } = require("../db.js");

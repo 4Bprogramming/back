@@ -11,4 +11,4 @@ router.post("/createPayment", createPayment);
 
 router.post("/validatePayment", validatePayment);
 
-module.exports = { paymentRouter: router };
+module.exports = { paymentRouter: router }; 

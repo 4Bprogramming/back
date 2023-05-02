@@ -11,7 +11,7 @@ const validadorDeDatos = [
     .isLength({ min: 2, max: 90 }).withMessage("Caractéres mínimos: min 2, max 90"),
 
     //validamos apellido
-    check("apellido")
+    check("apellido") 
     .trim()
     .notEmpty().withMessage("Campo del apellido vacío")
     .isAlpha('es-ES', { ignore: ' ' }).withMessage("Ingrese sólo letras")

@@ -18,7 +18,7 @@ const createPayment = (req, res) => {
   axios
     .post(
       "https://api.micuentaweb.pe/api-payment/V4/Charge/CreatePayment",
-      body,
+      body, 
       {
         headers: {
           Authorization: `Basic ${auth}`,

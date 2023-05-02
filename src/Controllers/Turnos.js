@@ -6,7 +6,7 @@ const {
 const { checking } = require("./helpers");
 
 const horariosCreados = async(req, res, next)=>{
-    try {
+    try { 
         
         let {tiempoInicio, tiempoFinal, duracion}=req.body
         // console.log('la action entro al back con estos datos==>', req.body);

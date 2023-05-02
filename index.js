@@ -9,7 +9,7 @@ conn.sync({ force: false }).then(() => {
 
     console.log(`Listening at PORT ${PORT} `); // eslint-disable-line no-console
 
-
+ 
   });
 });
  
