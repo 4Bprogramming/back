@@ -343,7 +343,7 @@ const passwordOlvidado = async (req, res, next) => {
 
     //armamos el link para resetear
     // const link = `localhost:3001/resetPassword`; //ver en front cual es el LINK que abre la FORM
-    const link = `http://localhost:3000/reset-password/${email}/${token}`;
+    const link = `https://www.centropequenosgigantes.com/reset-password/${email}/${token}`;
     // console.log('link de redirección==>', link);
 
     //armamos template para enviar por email
