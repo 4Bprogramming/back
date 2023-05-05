@@ -313,66 +313,66 @@ const transporter = nodemailer.createTransport({
 //********** PASSWORD OLVIDADO*****ATENCION A ESTAS FUNCIONES*********/
 const passwordOlvidado = async (req, res, next) => {
   try {
-    // const { email } = req.body;
-    // // console.log('voy a buscar si el mail existe==>', email);
-    // let rolBuscadoEnDB = null;
-    // //chequeamos el SELECT
-    // rolBuscadoEnDB = await Usuario.findByPk(email);
-    // // console.log('se encontró en pacientes=>', rolBuscadoEnDB);
-    // if (!rolBuscadoEnDB) {
-    //   rolBuscadoEnDB = await Profesional.findOne({ where: { email: email } });
-    // } 
+    const { email } = req.body;
+    // console.log('voy a buscar si el mail existe==>', email);
+    let rolBuscadoEnDB = null;
+    //chequeamos el SELECT
+    rolBuscadoEnDB = await Usuario.findByPk(email);
+    // console.log('se encontró en pacientes=>', rolBuscadoEnDB);
+    if (!rolBuscadoEnDB) {
+      rolBuscadoEnDB = await Profesional.findOne({ where: { email: email } });
+    } 
     
-    // console.log('se encontró en profesional=>', rolBuscadoEnDB);
-    // if (!rolBuscadoEnDB) {
-    //   rolBuscadoEnDB = await Admin.findByPk(email);
-    //   // console.log('se encontró en admin=>', rolBuscadoEnDB);
-    // } if (!rolBuscadoEnDB) {
-    //   // console.log('no se encontró el email');
-    //   return res.status(401).send({ message: `El email no fue encontrado.` });
-    // }
+    console.log('se encontró en profesional=>', rolBuscadoEnDB);
+    if (!rolBuscadoEnDB) {
+      rolBuscadoEnDB = await Admin.findByPk(email);
+      // console.log('se encontró en admin=>', rolBuscadoEnDB);
+    } if (!rolBuscadoEnDB) {
+      // console.log('no se encontró el email');
+      return res.status(401).send({ message: `El email no fue encontrado.` });
+    }
 
-    // //crear un token para devolver  y sera usado para crear el nuevo password
-    // const usuario = {
-    //   email: rolBuscadoEnDB.email,
-    //   nombre: rolBuscadoEnDB.nombre,
-    // };
-    // console.log('usuario=>', usuario);
-    // //firmamos token
-    // const token = await tokenSign(usuario, "15m");
+    //crear un token para devolver  y sera usado para crear el nuevo password
+    const usuario = {
+      email: rolBuscadoEnDB.email,
+      nombre: rolBuscadoEnDB.nombre,
+    };
+    console.log('usuario=>', usuario);
+    //firmamos token
+    const token = await tokenSign(usuario, "15m");
 
-    // //armamos el link para resetear
-    // // const link = `localhost:3001/resetPassword`; //ver en front cual es el LINK que abre la FORM
-    // const link = `https://www.centropequenosgigantes.com/reset-password/${email}/${token}`;
-    // // console.log('link de redirección==>', link);
+    //armamos el link para resetear
+    // const link = `localhost:3001/resetPassword`; //ver en front cual es el LINK que abre la FORM
+    const link = `https://www.centropequenosgigantes.com/reset-password/${email}/${token}`;
+    // console.log('link de redirección==>', link);
 
-    // //armamos template para enviar por email
-    // const mailDetails = {
-    //   from: "no-reply@centropequenosgigantes.com",
-    //   // to: usuario.email,
-    //   to: `${rolBuscadoEnDB.email}`,
-    //   subject: "Recuperar el password",
-    //   html: `
-    //       <H2>Hola ${rolBuscadoEnDB.nombre}!</h2>
-    //       <h2>Este es el servicio de recuperacion de contraseña</h2>
-    //       <h3>Para resetear el password, hace click en el siguiente Link</h3>
-    //       <h4>
-    //         <a href="${link}" target="_blank">Reset contraseña</a>
-    //       </h4>  
-    //       `,
-    // };
-    // //usamos el transporter para enviar el mail con el magic-link
-    // transporter.sendMail(mailDetails, (err, info) => {
-    //   if (err) {
-    //     return res.status(500).send(err.message);
-    //   } else {
-    //     res.status(200).json({
-    //       //estas variables vienen del objeto usuario creado arriba
-    //       message: `Hola, ¿Cómo estás? ${usuario.nombre}, te hemos enviado un email a ${usuario.email}`,
-    //       token: token,
-    //     });
-    //   }
-    // });
+    //armamos template para enviar por email
+    const mailDetails = {
+      from: "no-reply@centropequenosgigantes.com",
+      // to: usuario.email,
+      to: `${rolBuscadoEnDB.email}`,
+      subject: "Recuperar el password",
+      html: `
+          <H2>Hola ${rolBuscadoEnDB.nombre}!</h2>
+          <h2>Este es el servicio de recuperacion de contraseña</h2>
+          <h3>Para resetear el password, hace click en el siguiente Link</h3>
+          <h4>
+            <a href="${link}" target="_blank">Reset contraseña</a>
+          </h4>  
+          `,
+    };
+    //usamos el transporter para enviar el mail con el magic-link
+    transporter.sendMail(mailDetails, (err, info) => {
+      if (err) {
+        return res.status(500).send(err.message);
+      } else {
+        res.status(200).json({
+          //estas variables vienen del objeto usuario creado arriba
+          message: `Hola, ¿Cómo estás? ${usuario.nombre}, te hemos enviado un email a ${usuario.email}`,
+          token: token,
+        });
+      }
+    });
   } catch (e) {
     next(e);
   }
@@ -383,31 +383,31 @@ const passwordOlvidado = async (req, res, next) => {
 // si o si hay que incluir el TOKEN en los headers del FRONT
 const resetPassword = async (req, res, next) => {
   try {
-    // const { password, email } = req.body;
-    // let rolDB = null;
-    // rolDB = await Usuario.findByPk(email);
-    // if (!rolDB) {
-    //   rolDB = await Profesional.findOne({ where: { email: email } });
-    // } else if (!rolDB) {
-    //   rolDB = await Admin.findByPk(email);
-    // } else if (!rolDB) {
-    //   return res.status(401).send({ message: "¡El email no se encontró!." });
-    // }
+    const { password, email } = req.body;
+    let rolDB = null;
+    rolDB = await Usuario.findByPk(email);
+    if (!rolDB) {
+      rolDB = await Profesional.findOne({ where: { email: email } });
+    } else if (!rolDB) {
+      rolDB = await Admin.findByPk(email);
+    } else if (!rolDB) {
+      return res.status(401).send({ message: "¡El email no se encontró!." });
+    }
 
-    // //hasheamos password nuevamente
-    // const hashedPassword = await hashPassword(password);
-    // const usuarioActualizado = await rolDB?.update({
-    //   password: hashedPassword,
-    // });
-    // if (!usuarioActualizado) {
-    //   return res
-    //     .status(401)
-    //     .send({ message: "¡No se ha podido cambiar su contraseña!" });
-    // } else {
-    //   res
-    //     .status(200)
-    //     .send({ message: "¡El cambio de su contraseña fue exitoso!" });
-    // }
+    //hasheamos password nuevamente
+    const hashedPassword = await hashPassword(password);
+    const usuarioActualizado = await rolDB?.update({
+      password: hashedPassword,
+    });
+    if (!usuarioActualizado) {
+      return res
+        .status(401)
+        .send({ message: "¡No se ha podido cambiar su contraseña!" });
+    } else {
+      res
+        .status(200)
+        .send({ message: "¡El cambio de su contraseña fue exitoso!" });
+    }
   } catch (e) {
     next(e);
   }
