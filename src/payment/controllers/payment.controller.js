@@ -27,11 +27,12 @@ const createPayment = (req, res) => {
     )
     .then((rpta) => {
       { 
+        // console.log('respuesta=>', rpta);
         res.status(200).json({ formToken: rpta.data.answer.formToken });
       }
     })
     .catch((error) => {
-      console.log(error);
+      // console.log('error=>',error);
       res.status(500).json("Error server");
     });
 };
