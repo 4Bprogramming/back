@@ -10,20 +10,12 @@ const {
 } = process.env;
 
 
-const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/pequenos`, {
-// const sequelize = new Sequelize(DATABASE_URL, {
+export const sequelize = new Sequelize(`mysql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/pequenos`, {
   logging: false, // set to console.log to see the raw SQL queries
-  native: false,// lets Sequelize know we can use pg-native for ~30% more speed
-   
-  // //extra configuration for heroku
-  //   dialectOptions:{
-  //   ssl:{
-  //     require:true,
-  //     rejectUnauthorized:false
-  //    }
-  //  },
+  native: false, // lets Sequelize know we can use pg-native for ~30% more speed
+  dialect: "mysql",
 
-})
+});
 const basename = path.basename(__filename);
 
 const modelDefiners = [];
